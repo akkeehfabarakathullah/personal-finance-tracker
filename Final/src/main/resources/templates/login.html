@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #5c6bc0, #d1c4e9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .login-container h2 {
+            margin: 0 0 20px;
+            color: #333;
+        }
+        .login-container form {
+            margin-bottom: 20px;
+        }
+        .login-container label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            text-align: left;
+        }
+        .login-container input[type="email"],
+        .login-container input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #3f51b5;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .login-container button:hover {
+            background-color: #303f9f;
+        }
+        .social-buttons {
+            margin: 20px 0;
+        }
+        .social-buttons a {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .social-buttons a:hover {
+            opacity: 0.8;
+        }
+        .google-btn { background-color: #db4437; }
+        .twitter-btn { background-color: #1da1f2; }
+        .facebook-btn { background-color: #3b5998; }
+        .social-buttons i {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        .logout-btn {
+            margin-top: 20px;
+            background-color: #dc3545;
+        }
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+
+
+<body>
+<div class="login-container">
+    <h2>Login to Your Account</h2>
+    <form id="login-form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required/>
+        <br/>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required/>
+        <br/>
+        <button type="button" onclick="login()">Login</button>
+    </form>
+
+    <div class="social-buttons">
+        <a href="https://support.google.com/accounts/answer/12629094?hl=en" class="google-btn">
+            <i class="fab fa-google"></i> Login with Google
+        </a>
+        <a href="https://twitter.com/login" class="twitter-btn">
+            <i class="fab fa-twitter"></i> Login with Twitter
+        </a>
+        <a href="https://www.facebook.com/login" class="facebook-btn">
+            <i class="fab fa-facebook-f"></i> Login with Facebook
+        </a>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<script>
+    function login() {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+
+        const storedEmail = localStorage.getItem('userEmail');
+        const storedPassword = localStorage.getItem('userPassword');
+
+        if (email === storedEmail && password === storedPassword) {
+            localStorage.setItem('loggedIn', 'true');
+            window.location.href = "/home"; // Redirect to the home page
+        } else {
+            alert('Invalid email or password');
+    }}
+
+    function logout() {
+        const confirmLogout = confirm('Are you sure you want to log out?');
+        if (confirmLogout) {
+            localStorage.removeItem('loggedIn');
+            window.location.href = "/user/register"; // Redirect to login page
+        }
+        window.onload = function () {
+            if (localStorage.getItem('loggedIn') === 'true') {
+                window.location.href = "/home"; // Redirect to home page if already logged in
+            }
+        };
+    }
+</script>
+
+</body>
+</html>

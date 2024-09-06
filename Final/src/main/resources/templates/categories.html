@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Categories</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d1c4e9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        form input, form select, form button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        form button {
+            background-color: #3f51b5;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #218838;
+        }
+
+        .expense-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .expense-table th, .expense-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .expense-table th {
+            background-color: #f8f8f8;
+        }
+        /* Add your styles here */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form, .transaction-table, .manage-categories {
+            margin-bottom: 20px;
+        }
+        input[type="text"], select, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .transaction-table table, .manage-categories table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .transaction-table th, .transaction-table td, .manage-categories th, .manage-categories td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .transaction-table th, .manage-categories th {
+            background-color: #f2f2f2;
+        }
+        .manage-categories button {
+            background-color: #218838;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        .manage-categories button.delete-category{
+        background-color:#c82333;
+        }
+        .manage-categories button.edit-category {
+            background-color: #ffa500;
+        }
+        .manage-categories button.add-category {
+            background-color: #218838;
+        }
+        header {
+            background-color: #6a1b9a; /* Deep purple */
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #e1bee7; /* Light lavender */
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #ddd;
+            color: #6a1b9a;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #ccc;
+        }
+    </style>
+<body>
+<nav>
+    <header>
+    <div class="nav-links">
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/new/dashboard">Dashboard</a></li>
+            <li><a href="/transactions/history">Transaction History</a></li>
+            <li><a href="/user/login">Logout</a></li>
+
+        </ul>
+    </div>
+    </header>
+</nav>
+<div class="container">
+    <h1>Manage Categories</h1>
+    <div class="manage-categories">
+<!--        <h2>Categories Table</h2>-->
+        <input type="text" id="new-category" placeholder="New Category" />
+        <select id="category-type">
+            <option value="" disabled selected>Select Category Type</option>
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
+        </select>
+        <button id="add-category">Add Category</button>
+        <table>
+            <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Category Type</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="category-list"></tbody>
+        </table>
+
+    </div>
+</div>
+<script src="script.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const addCategoryButton = document.getElementById("add-category");
+        const newCategoryInput = document.getElementById("new-category");
+        const categoryTypeSelect = document.getElementById("category-type");
+        const categoryList = document.getElementById("category-list");
+
+        let categories = JSON.parse(localStorage.getItem('categories')) || [
+            { name: "Gift and Donations", type: "Expense" },
+            { name: "Food and Drink", type: "Expense" },
+        ];
+
+        function populateCategoryTable() {
+            categoryList.innerHTML = '';
+            categories.forEach(cat => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                <td>${cat.name}</td>
+                <td>${cat.type}</td>
+                <td>
+                    <button class="edit-category" data-name="${cat.name}" data-type="${cat.type}">Edit</button>
+                    <button class="delete-category" data-name="${cat.name}">Delete</button>
+                </td>
+            `;
+                categoryList.appendChild(row);
+            });
+            localStorage.setItem('categories', JSON.stringify(categories));
+        }
+
+        addCategoryButton.addEventListener("click", () => {
+            const newCategoryName = newCategoryInput.value.trim();
+            const newCategoryType = categoryTypeSelect.value;
+
+            if (newCategoryName && newCategoryType && !categories.some(cat => cat.name === newCategoryName)) {
+                categories.push({ name: newCategoryName, type: newCategoryType });
+                populateCategoryTable();
+                newCategoryInput.value = '';
+                categoryTypeSelect.value = '';
+            } else {
+                alert("Invalid input or category already exists.");
+            }
+        });
+
+        categoryList.addEventListener("click", (e) => {
+            const name = e.target.dataset.name;
+            if (e.target.classList.contains("delete-category")) {
+                categories = categories.filter(cat => cat.name !== name);
+                populateCategoryTable();
+            }
+
+            if (e.target.classList.contains("edit-category")) {
+                const newType = prompt("Enter new category type (Income/Expense):");
+                if (newType === "Income" || newType === "Expense") {
+                    categories = categories.map(cat => cat.name === name ? { ...cat, type: newType } : cat);
+                    populateCategoryTable();
+                } else {
+                    alert("Invalid category type.");
+                }
+            }
+        });
+
+        populateCategoryTable();
+    });
+</script>
+      <a href="/home" class="back-btn">Add New Transaction</a>
+</body>
+</html>

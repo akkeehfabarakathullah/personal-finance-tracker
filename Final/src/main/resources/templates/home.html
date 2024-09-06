@@ -1,0 +1,127 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f9; /* Light grayish blue */
+                color: #333;
+            }
+            header {
+                background-color: #6a1b9a; /* Deep purple */
+                color: white;
+                padding: 15px 0;
+                position: sticky;
+                top: 0;
+                width: 100%;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            nav ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+            }
+            nav ul li {
+                margin: 0 15px;
+            }
+            nav ul li a {
+                color: white;
+                text-decoration: none;
+                font-size: 18px;
+                font-weight: bold;
+                transition: color 0.3s ease;
+            }
+            nav ul li a:hover {
+                color: #e1bee7; /* Light lavender */
+            }
+            main {
+                text-align: center;
+                padding: 20px;
+            }
+            .card {
+                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                margin: 20px auto;
+                max-width: 600px;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                border: 1px solid #d1c4e9; /* Light purple border */
+            }
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+            .card h2 {
+                margin-top: 0;
+                color: #5c6bc0; /* Medium blue */
+            }
+            .card p {
+                color: #333333; /* Darker gray for text */
+            }
+            .card a {
+                display: inline-block;
+                padding: 10px 20px;
+                border-radius: 5px;
+                background-color: #1e3a8a; /* Dark blue */
+                color: white;
+                text-decoration: none;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            }
+            .card a:hover {
+                background-color: #1e40af; /* Darker blue */
+            }
+        </style>
+
+</head>
+
+
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/user/register">New User Registration</a></li>
+            <li><a href="/user/login">User Login</a></li>
+            <li><a href="/user/login">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <h1>Welcome to Your Financial Management System</h1>
+    <div class="card">
+        <h2>Overview</h2>
+        <p>Manage your finances effectively with our system. Use the links below to navigate to different sections.</p>
+        <a href="/new/dashboard">Go to Dashboard</a>
+    </div>
+    <div class="card">
+
+        <h2>Categories</h2>
+        <p>Organize and view your categories.</p>
+        <a href="/categories">View Categories</a>
+    </div>
+    <div class="card">
+
+        <h2>Transactions</h2>
+        <p>Track and record your transactions more effectively.</p>
+        <a href="/transactions/new">View Transactions</a>
+    </div>
+    <div class="card">
+
+        <h2>Transactions History</h2>
+        <p>View all your recorded transaction.</p>
+        <a href="/transactions/history">Transaction History</a>
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<style>
+    .form-container {
+        margin-top: 50px;
+    }
+    .colorgraph {
+        height: 5px;
+        border: 0;
+        background: linear-gradient(to right, #6a1b9a, #1e40af);
+        margin-bottom: 20px;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #d2c5ef, #acb9f3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .btn-primary {
+        background-color: #6a1b9a;
+        border-color: #6a1b9a;
+    }
+    .btn-primary:hover {
+        background-color: #4a0072;
+        border-color: #4a0072;
+    }
+    .modal-content {
+        border-radius: 0;
+    }
+    .register-button-container {
+        text-align: center;
+    }
+    .terms-text {
+        font-size: 12px; /* Smaller text for terms and conditions */
+    }
+    .terms-checkbox {
+        margin-right: 10px;
+    }
+    .terms-container {
+        display: flex;
+        align-items: center;
+    }
+    .terms-link {
+        margin-left: 10px;
+    }
+</style>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 form-container">
+            <h2>Please Register! <small>It's free and always will be.</small></h2>
+            <hr class="colorgraph">
+            <form id="registrationForm">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" name="userName" id="userName" class="form-control input-lg" placeholder="User Name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                        <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-remove"></i></span>
+                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="Confirm Password" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="terms-container">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="t_and_c" class="terms-checkbox"> I Agree
+                                </label>
+                            </div>
+                            <a href="#" data-toggle="modal" data-target="#t_and_c_m" class="terms-link">Terms and Conditions</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="colorgraph">
+                <div class="row">
+                    <div class="register-button-container">
+                        <input type="submit" value="Register" class="btn btn-primary btn-lg">
+                        <br/><br/>
+                        <a href="/user/login" class="btn btn-info btn-lg">Already Registered? Login</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="t_and_c_m" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body terms-text">
+                    <h2>Terms & Conditions</h2>
+                    <ul class="terms-list">
+                        <li><strong>Acceptance of Terms:</strong> By using this service, you agree to abide by these terms and conditions.</li>
+                        <li><strong>Eligibility:</strong> You must be at least 18 years old to use this service.</li>
+                        <li><strong>Account Responsibility:</strong> You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account.</li>
+                        <li><strong>User Conduct:</strong> You agree not to engage in any illegal activities or any conduct that could damage or disrupt the service.</li>
+                        <li><strong>Data Collection and Privacy:</strong> We collect and use your data in accordance with our Privacy Policy.</li>
+                        <li><strong>Content Ownership:</strong> You retain ownership of the content you upload but grant us a license to use it as described in our policies.</li>
+                        <li><strong>Termination:</strong> We reserve the right to terminate or suspend your account if you violate these terms.</li>
+                        <li><strong>Dispute Resolution:</strong> Any disputes will be resolved through arbitration, as detailed in our arbitration policy.</li>
+                        <li><strong>Limitation of Liability:</strong> Our liability is limited to the maximum extent permitted by law.</li>
+                        <li><strong>Modifications:</strong> We may update these terms from time to time, and you will be notified of significant changes.</li>
+                        <li><strong>Governing Law:</strong> These terms are governed by the laws of the Jurisdiction.</li>
+                    </ul>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">I Agree</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
+<script>
+    document.getElementById('registrationForm').onsubmit = function(event) {
+        event.preventDefault();
+
+        // Get form values
+        var email = document.getElementById('email').value.trim();
+        var password = document.getElementById('password').value.trim();
+        var confirmPassword = document.getElementById('password_confirmation').value.trim();
+        var checkbox = document.getElementById('t_and_c');
+
+        // Validate form
+        if (!checkbox.checked) {
+            alert("You must agree to the Terms and Conditions to register.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        // Save user credentials to localStorage
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userPassword', password);
+
+        // Redirect to login page
+        window.location.href = "/user/login";
+    };
+
+</script>
+</body>
+</html>

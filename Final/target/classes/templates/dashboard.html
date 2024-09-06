@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .summary, .transactions {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .summary h2, .transactions h2 {
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #d1c4e9;
+        }
+        input[type="text"], input[type="number"], input[type="date"], select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            border: 1px solid #6a1b9a;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        header {
+            background-color: #6a1b9a; /* Deep purple */
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #e1bee7; /* Light lavender */
+        }
+    </style>
+</head>
+
+<body>
+<header>
+<nav>
+    <div class="nav-links">
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/transactions/new">Transaction</a></li>
+            <li><a href="/transactions/history">Transaction History</a></li>
+            <li><a href="/categories">Categories</a></li>
+            <li><a href="/user/login">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+</header>
+
+<div class="container">
+    <div class="summary">
+        <h2>Summary</h2>
+        <div>
+            <label for="total-income">Total Income:</label>
+            <input type="number" id="total-income" name="total-income" step="0.01" value="0.00" readonly>
+        </div>
+        <div>
+            <label for="total-expenses">Total Expenses:</label>
+            <input type="number" id="total-expenses" name="total-expenses" step="0.01" value="0.00" readonly>
+        </div>
+        <div>
+            <label for="net-income">Net Income:</label>
+            <input type="number" id="net-income" name="net-income" step="0.01" value="0.00" readonly>
+        </div>
+        <div>
+            <label for="transaction-count">Number of Transactions:</label>
+            <input type="number" id="transaction-count" name="transaction-count" step="1" value="0" readonly>
+        </div>
+        <button type="button" onclick="updateSummary()">Update Summary</button>
+    </div>
+
+    <div class="transactions">
+        <h2>Recent Transactions</h2>
+        <table id="transactions-table">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Type</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Transactions will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+        function fetchSummary() {
+        const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+        // Calculate total income
+        const totalIncome = transactions
+        .filter(t => t.type === 'INCOME')
+        .reduce((acc, t) => acc + parseFloat(t.amount), 0);
+
+        // Calculate total expenses
+        const totalExpenses = transactions
+        .filter(t => t.type === 'EXPENSE')
+        .reduce((acc, t) => acc + parseFloat(t.amount), 0);
+
+        // Calculate net income
+        const netIncome = totalIncome - totalExpenses;
+
+        // Update the summary fields
+        document.getElementById('total-income').value = totalIncome.toFixed(2);
+        document.getElementById('total-expenses').value = totalExpenses.toFixed(2);
+        document.getElementById('net-income').value = netIncome.toFixed(2);
+        document.getElementById('transaction-count').value = transactions.length;
+    }
+
+        function fetchTransactions() {
+        const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        const table = document.getElementById('transactions-table').getElementsByTagName('tbody')[0];
+        table.innerHTML = ''; // Clear existing rows
+
+        transactions.forEach(transaction => {
+        const newRow = table.insertRow();
+        newRow.insertCell().textContent = transaction.transactionDate;
+        newRow.insertCell().textContent = transaction.description;
+        newRow.insertCell().textContent = (transaction.type === 'INCOME' ? '+' : '-') + '$' + parseFloat(transaction.amount).toFixed(2);
+        newRow.insertCell().textContent = transaction.type;
+    });
+    }
+
+        function updateSummary() {
+        fetchSummary(); // Update the summary with the latest values
+        fetchTransactions(); // Update the transactions table
+    }
+
+        document.addEventListener('DOMContentLoaded', function() {
+        updateSummary(); // Initial summary update
+
+        // Listen for updates from the transaction page
+        window.addEventListener('storage', function(event) {
+        if (event.key === 'updateDashboard') {
+        updateSummary(); // Update the summary and transactions table when notified
+    }
+    });
+    });
+</script>
+</body>
+</html>

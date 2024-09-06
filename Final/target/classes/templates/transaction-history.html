@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+</head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9; /* Light purple background */
+        color: #333;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #6a1b9a; /* Dark purple */
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 8px;
+        color: #6a1b9a; /* Dark purple */
+    }
+
+    form select, form input[type="date"] {
+        width: calc(100% - 16px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .manage-categories button.delete-category{
+        background-color:#c82333;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #218838; /* Blue */
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #5c6bc0; /* Lighter blue */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 auto;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+    }
+
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color:#1e3a8a; /* Dark purple */
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    a {
+        color: #1e40af; /* Blue */
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+    header {
+        background-color: #6a1b9a;
+        color: white;
+        padding: 10px 0;
+    }
+
+    nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav ul li {
+        margin: 0 15px;
+    }
+
+    nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+    }
+
+    nav ul li a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<header>
+<nav>
+    <div class="nav-links">
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/new/dashboard">Dashboard</a></li>
+            <li><a href="/transactions/new">New Transaction</a></li>
+            <li><a href="/categories">Categories</a></li>
+            <li><a href="/user/login">Logout</a></li>
+
+        </ul>
+    </div>
+</nav>
+</header>
+
+<body>
+<h1>Transaction History</h1>
+
+<form id="filter-form" action="/transactions/history" method="get">
+    <label for="type">Type:</label>
+    <select id="type" name="type">
+        <option value="">All</option>
+        <option value="INCOME">Income</option>
+        <option value="EXPENSE">Expense</option>
+    </select>
+
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate" />
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate" />
+
+    <button type="submit">Filter</button>
+
+</form>
+
+<table id="transaction-table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadTransactions();
+
+        // Attach the form submit event to the filter function
+        document.getElementById('filter-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+            loadTransactions(); // Reload transactions with filters applied
+        });
+    });
+
+    function loadTransactions() {
+        const tbody = document.querySelector('#transaction-table tbody');
+        const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+        // Get filter values
+        const type = document.getElementById('type').value;
+        const startDate = document.getElementById('startDate').value ? new Date(document.getElementById('startDate').value) : null;
+        const endDate = document.getElementById('endDate').value ? new Date(document.getElementById('endDate').value) : null;
+
+        tbody.innerHTML = '';
+
+        transactions.forEach(transaction => {
+            const transactionDate = new Date(transaction.transactionDate);
+
+            // Apply filters
+            const isTypeMatch = !type || transaction.type === type;
+            const isStartDateMatch = !startDate || transactionDate >= startDate;
+            const isEndDateMatch = !endDate || transactionDate <= endDate;
+
+            if (isTypeMatch && isStartDateMatch && isEndDateMatch) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.amount}</td>
+                    <td>${transaction.description}</td>
+                    <td>${transaction.transactionDate}</td>
+                    <td>${transaction.type}</td>
+                    <td>${transaction.category}</td>
+                    <td><button class="delete-btn" data-id="${transaction.id}">Delete</button></td>
+                `;
+                tbody.appendChild(row);
+            }
+        });
+    }
+
+    document.querySelector('#transaction-table tbody').addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-btn')) {
+            const id = event.target.dataset.id;
+            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            transactions = transactions.filter(transaction => transaction.id != id);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            loadTransactions();
+
+            // Notify the dashboard of the update
+            localStorage.setItem('updateDashboard', new Date().toISOString());
+        }
+    });
+
+</script>
+</body>
+
+</html>
+
+
+
+
